@@ -1,0 +1,29 @@
+classes:
+- system.linux.system.single
+- system.linux.system.repo.mcp.extra
+- system.linux.system.repo.mcp.salt
+- system.linux.system.repo.ubuntu
+- system.openssh.server.team.all
+- system.rsyslog.client.single
+parameters:
+  _param:
+    # infra service addresses
+    infra_config_hostname: cfg01
+    infra_config_address: 172.16.10.100
+    infra_config_deploy_address: 192.168.10.90
+
+    cluster_domain: k8s-aio-contrail.local
+    # Commented out for temponarily disable test
+    # cluster_name: k8s-aio-contrail
+    apt_mk_version: nightly
+  linux:
+    network:
+      host:
+        cfg01:
+          address: ${_param:infra_config_address}
+          names:
+          - ${_param:infra_config_hostname}
+          - ${_param:infra_config_hostname}.${_param:cluster_domain}
+    system:
+      name: ${_param:infra_config_hostname}
+      domain: ${_param:cluster_domain}

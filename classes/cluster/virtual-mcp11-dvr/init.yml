@@ -1,0 +1,18 @@
+classes:
+- system.linux.network.dynamic_hosts
+- service.grafana.collector
+- system.heka.log_collector.single
+- system.heka.log_collector.output.telegraf
+- system.linux.system.repo.mcp.extra
+- system.linux.system.single
+- system.rsyslog.client.single
+- system.prometheus.collector
+- system.telegraf.agent
+- system.openssh.server.team.lab
+- system.openssh.server.team.tcpcloud
+- system.openssh.server.team.stacklight
+- system.openssh.server.team.mcp_qa
+- cluster.virtual-mcp11-dvr.infra
+- cluster.virtual-mcp11-dvr.openstack
+- cluster.virtual-mcp11-dvr.stacklight
+- cluster.overrides

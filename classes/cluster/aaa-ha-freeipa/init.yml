@@ -1,0 +1,6 @@
+classes:
+- system.linux.network.dynamic_hosts
+- cluster.aaa-ha-freeipa.aaa.freeipa_server
+- cluster.aaa-ha-freeipa.infra
+- cluster.overrides
+

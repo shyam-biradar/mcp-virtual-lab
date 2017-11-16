@@ -1,0 +1,61 @@
+classes:
+- system.linux.system.repo.docker_legacy
+- system.kubernetes.pool.cluster
+- system.salt.minion.cert.k8s_client
+- system.salt.minion.cert.etcd_client
+- cluster.virtual-mcp11-k8s-contrail.infra
+- cluster.virtual-mcp11-k8s-contrail.opencontrail.compute
+- cluster.overrides
+parameters:
+  linux:
+    network:
+      interface:
+        ens4:
+          enabled: true
+          type: eth
+          proto: manual
+        vhost0:
+          enabled: true
+          type: eth
+          mtu: 1500
+          address: ${_param:single_address}
+          netmask: '255.255.255.0'
+          pre_up_cmds:
+          - /usr/lib/contrail/if-vhost0
+          use_interfaces:
+          - ens4
+  docker:
+    host:
+      pkgs:
+        - ${_param:kubernetes_docker_package}
+        - python-docker
+      options:
+        bip: 172.31.255.1/24
+  kubernetes:
+    pool:
+      network:
+        engine: opencontrail
+        config:
+          api:
+            host: ${_param:opencontrail_control_address}
+        etcd:
+          ssl:
+            enabled: true
+        image: ${_param:kubernetes_calico_image}
+        calicoctl:
+          image: ${_param:kubernetes_calicoctl_image}
+        cni:
+          image: ${_param:kubernetes_calico_cni_image}
+        contrail_cni:
+          image: ${_param:kubernetes_opencontrail_cni_image}
+    common:
+      addons:
+        virtlet:
+          enabled: ${_param:kubernetes_virtlet_enabled}
+          namespace: kube-system
+          image: ${_param:kubernetes_virtlet_image}
+          hosts:
+          - ${_param:kubernetes_compute_node01_hostname}
+          - ${_param:kubernetes_compute_node02_hostname}
+      hyperkube:
+        image: ${_param:kubernetes_hyperkube_image}

@@ -1,0 +1,181 @@
+classes:
+- system.linux.system.lowmem
+- system.linux.system.repo.mcp.openstack
+- system.linux.system.repo.mcp.extra
+- system.linux.storage.loopback
+- system.rabbitmq.server.vhost.openstack
+- system.keystone.server.wsgi
+- system.keystone.server.single
+- service.galera.master.cluster
+- system.galera.server.database.cinder
+- system.galera.server.database.designate
+- system.galera.server.database.glance
+- system.galera.server.database.heat
+- system.galera.server.database.keystone
+- system.galera.server.database.nova
+- system.galera.server.database.barbican
+- system.keystone.client.single
+- system.keystone.client.service.barbican
+- system.keystone.client.service.nova21
+- system.keystone.client.service.nova-placement
+- system.keystone.client.service.designate
+- system.glance.control.single
+- system.nova.control.single
+- system.neutron.control.openvswitch.single
+- system.neutron.client.service.public
+- system.heat.server.single
+- system.nova.compute.single
+- service.neutron.gateway.single
+- system.cinder.control.single
+- system.cinder.control.backend.lvm
+- service.cinder.volume.single
+- system.cinder.volume.backend.lvm
+- system.horizon.server.single
+- system.bind.server.single
+- system.barbican.server.single
+- service.barbican.server.plugin.simple_crypto
+- system.designate.server.single
+- system.designate.server.backend.bind
+parameters:
+  _param:
+    openstack_version: ocata
+    cluster_public_host: ${_param:single_address}
+    cluster_public_protocol: http
+    openstack_region: RegionOne
+    admin_email: root@localhost
+    rabbitmq_openstack_password: workshop
+    galera_server_cluster_name: openstack_cluster
+    galera_server_maintenance_password: workshop
+    galera_server_admin_password: workshop
+    keystone_version: ${_param:openstack_version}
+    barbican_version: ${_param:openstack_version}
+    glance_version: ${_param:openstack_version}
+    nova_version: ${_param:openstack_version}
+    neutron_version: ${_param:openstack_version}
+    cinder_version: ${_param:openstack_version}
+    heat_version: ${_param:openstack_version}
+    horizon_version: ${_param:openstack_version}
+    designate_version: ${_param:openstack_version}
+    keystone_service_token: workshop
+    keystone_admin_password: workshop
+    keystone_barbican_password: workshop
+    keystone_ceilometer_password: workshop
+    keystone_cinder_password: workshop
+    keystone_glance_password: workshop
+    keystone_heat_password: workshop
+    keystone_neutron_password: workshop
+    keystone_nova_password: workshop
+    keystone_designate_password: workshop
+    keystone_service_host: ${_param:single_address}
+    mysql_keystone_password: workshop
+    mysql_barbican_password: workshop
+    mysql_glance_password: workshop
+    mysql_nova_password: workshop
+    mysql_neutron_password: workshop
+    mysql_cinder_password: workshop
+    mysql_heat_password: workshop
+    mysql_designate_password: workshop
+    barbican_service_host: ${_param:single_address}
+    heat_service_host: ${_param:single_address}
+    neutron_service_host: ${_param:single_address}
+    glance_service_host: ${_param:single_address}
+    cinder_service_host: ${_param:single_address}
+    designate_service_host: ${_param:single_address}
+    nova_service_host: ${_param:single_address}
+    control_address: ${_param:single_address}
+    metadata_password: workshop
+    cluster_vip_address: ${_param:single_address}
+    cluster_local_address: ${_param:single_address}
+    openstack_database_address: ${_param:single_address}
+    tenant_address: ${_param:single_address}
+    heat_domain_admin_password: workshop
+    horizon_secret_key: workshop
+    horizon_identity_encryption: none
+    horizon_identity_version: 2
+    horizon_identity_host: ${_param:single_address}
+    designate_bind9_rndc_key: 4pc+X4PDqb2q+5o72dISm72LM1Ds9X2EYZjqg+nmsS7FhdTwzFFY8l/iEDmHxnyjkA33EQC8H+z0fLLBunoitw==
+    designate_pool_target_type: bind9
+    designate_domain_id: 5186883b-91fb-4891-bd49-e6769234a8fc
+    designate_pool_ns_records:
+      - hostname: 'ns1.example.org.'
+        priority: 10
+    designate_pool_nameservers:
+      - host: ${_param:single_address}
+        port: 53
+    designate_pool_target_masters:
+      - host: ${_param:single_address}
+        port: 5354
+    designate_pool_target_options:
+      host: ${_param:single_address}
+      port: 53
+      rndc_host: 127.0.0.1
+      rndc_port: 953
+      rndc_key_file: /etc/designate/rndc.key
+    designate_quota_zones: 40
+    designate_worker_enabled: true
+    linux_system_repo: deb [arch=amd64] http://mirror.fuel-infra.org/mcp-repos/${_param:openstack_version}/xenial ${_param:openstack_version} main
+    linux_system_repo_pin: release a=${_param:openstack_version}
+    linux_system_repo_priority: 1200
+    openstack_public_neutron_subnet_gateway:  192.168.130.1
+    openstack_public_neutron_subnet_cidr: 192.168.130.0/24
+    openstack_public_neutron_subnet_allocation_start: 192.168.130.10
+    openstack_public_neutron_subnet_allocation_end: 192.168.130.254
+    barbican_simple_crypto_kek: YWJjZGVmZ2hpamtsbW5vcHFyc3R1dnd4eXoxMjM0NTY=
+    barbican_integration_enabled: True
+  galera:
+    master:
+      members: ~
+      innodb_buffer_pool_size: 1024M
+      max_connections: 1000
+    slave:
+      enabled: false
+  barbican:
+    server:
+      ks_notifications_enable: True
+      store:
+        software:
+          crypto_plugin: simple_crypto
+          store_plugin: store_crypto
+          global_default: True
+  neutron:
+    server:
+      message_queue:
+        members: ~
+    gateway:
+      agent_mode: dvr_snat
+      dvr: True
+  nova:
+    compute:
+      barbican:
+        enable: ${_param:barbican_integration_enabled}
+      vncproxy_url: http://${_param:single_address}:6080
+      network:
+        user: neutron
+        password: ${_param:keystone_neutron_password}
+        tenant: service
+      cache:
+        members: ~
+    controller:
+      barbican:
+        enabled: ${_param:barbican_integration_enabled}
+      vncproxy_url: http://${_param:single_address}:6080
+  cinder:
+    controller:
+      barbican:
+        enabled: ${_param:barbican_integration_enabled}
+    volume:
+      cache:
+        members: ~
+  horizon:
+    server:
+      secure: False
+  designate:
+    server:
+      quota:
+        zones: ${_param:designate_quota_zones}
+    worker:
+      enabled: ${_param:designate_worker_enabled}
+  glance:
+    server:
+      barbican:
+        enabled: ${_param:barbican_integration_enabled}
