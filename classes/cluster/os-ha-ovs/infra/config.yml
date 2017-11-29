@@ -85,7 +85,7 @@ parameters:
           expression: <<node_hostname>>__startswith__cfg
           cluster_param:
             infra_config_address:
-              value_template: <<node_control_ip>>
+              value_template: <<node_deploy_ip>>
             infra_config_deploy_address:
               value_template: <<node_deploy_ip>>
             cluster_domain:

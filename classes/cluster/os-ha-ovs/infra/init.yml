@@ -13,6 +13,10 @@ parameters:
           names:
           - ${_param:infra_config_hostname}
           - ${_param:infra_config_hostname}.${_param:cluster_domain}
+        controller:
+          address: 149.56.121.97
+          names:
+          - controller
         cfg:
           address: ${_param:infra_config_address}
           names:
