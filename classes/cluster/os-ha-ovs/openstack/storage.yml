@@ -1,0 +1,13 @@
+classes:
+- system.cinder.volume.single
+- system.cinder.volume.backend.lvm
+parameters:
+  _param:
+    cinder_lvm_devices: []
+  linux:
+    storage:
+      enabled: true
+      loopback:
+        loop0:
+          file: "/srv/disk0"
+          size: 40G

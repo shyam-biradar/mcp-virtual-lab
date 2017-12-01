@@ -115,6 +115,11 @@ parameters:
               value_template: <<node_tenant_ip>>
             external_address:
               value_template: <<node_external_ip>>
+        openstack_compute_storage:
+          expression: <<node_hostname>>__startswith__cmp0
+          node_class:
+            value_template:
+              - cluster.<<node_cluster>>.openstack.storage
         openstack_gateway:
           expression: <<node_hostname>>__startswith__gtw
           node_class:
