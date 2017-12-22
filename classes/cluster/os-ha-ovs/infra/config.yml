@@ -93,6 +93,8 @@ parameters:
         openstack_control01:
           expression: <<node_hostname>>__equals__ctl01
           cluster_param:
+            openstack_control_address:
+              value_template: <<node_control_ip>>
             openstack_control_node01_address:
               value_template: <<node_control_ip>>
         openstack_control02:
